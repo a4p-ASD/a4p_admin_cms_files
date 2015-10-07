@@ -5,8 +5,8 @@
  *	@company:	apps4print / page one GmbH, Nürnberg, Germany
  *
  *
- *	@version:	1.0.0
- *	@date:		28.08.2015
+ *	@version:	1.0.1
+ *	@date:		07.10.2015
  *
  *
  *	a4p_admin_cms_files__lang.php
