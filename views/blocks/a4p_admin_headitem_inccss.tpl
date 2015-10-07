@@ -2,7 +2,7 @@
 
 [{*
  *	@author:	a4p ASD / Andreas Dorner
- *	@company:	apps4print / page one GmbH, Nürnberg, Germany
+ *	@company:	apps4print / page one GmbH, NÃ¼rnberg, Germany
  *
  *
  *	@version:	1.0.1
