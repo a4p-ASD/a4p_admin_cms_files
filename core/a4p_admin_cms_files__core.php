@@ -5,8 +5,8 @@
  *	@company:	apps4print / page one GmbH, Nürnberg, Germany
  *
  *
- *	@version:	1.0.0
- *	@date:		28.08.2015
+ *	@version:	1.0.1
+ *	@date:		07.10.2015
  *
  *
  *	a4p_admin_cms_files__core.php
@@ -252,12 +252,16 @@ class a4p_admin_cms_files__core {
 										
 					#array_push( $a_cms_folders, $s_cur_file__abs );
 					#$a_cms_folders[ $file ]		= $s_cur_file__abs;
-					
+
+					// ------------------------------------------------------------------------------------------------
+					// als Array zurückgeben
 					$a_folder					= array();
 					$a_folder[ "name" ]			= $file;
 					$a_folder[ "abs" ]			= $s_cur_file__abs;
 					$a_folder[ "rel" ]			= $this->s_cms_files_dir__rel . $file;
 
+					// ------------------------------------------------------------------------------------------------
+					// Anzahl Dateien im Ordner
 					$i_dircontents              = count( scandir( $s_cur_file__abs ) );
 					if ( $i_dircontents )
 						$i_dircontents          -= 2;
@@ -265,8 +269,14 @@ class a4p_admin_cms_files__core {
 						$i_dircontents          = 0;
 					$a_folder[ "contents" ]		= $i_dircontents;
 
-					array_push( $a_cms_folders, $a_folder );
-						
+					// ------------------------------------------------------------------------------------------------
+					// Orderdatum als Array-Key zum sortieren 
+					$i_folder_filemtime         = filemtime( $s_cur_file__abs );
+					if ( isset( $a_cms_folders[ $i_folder_filemtime ] ) )
+						array_push( $a_cms_folders, $a_folder );
+					else
+						$a_cms_folders[ $i_folder_filemtime ]       = $a_folder;
+
 				}
 		
 		
@@ -280,6 +290,10 @@ class a4p_admin_cms_files__core {
 			#echo "could not open dir";
 			oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "could not open dir: '" . $this->get_cms_files_dir( true) . "'" );
 		}
+		
+		
+		// Sortieren
+		ksort( $a_cms_folders );
 		
 		
 		return $a_cms_folders;
