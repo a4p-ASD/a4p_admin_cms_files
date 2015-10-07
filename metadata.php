@@ -1,0 +1,57 @@
+<?php
+
+/**
+ *	@author:	a4p ASD / Andreas Dorner
+ *	@company:	apps4print / page one GmbH, Nürnberg, Germany
+ *
+ *
+ *	@version:	1.0.0
+ *	@date:		28.08.2015
+ *
+ *
+ *	metadata.php
+ *
+ *	apps4print - a4p_admin_cms_files - CMS als Dateien exportieren und importieren
+ *
+ */
+
+// ------------------------------------------------------------------------------------------------
+// apps4print
+// ------------------------------------------------------------------------------------------------
+
+$sMetadataVersion	= '1.1';
+
+$aModule = array(
+	'id'			=> 'a4p_admin_cms_files', 
+	'title'			=> 'apps4print - a4p_admin_cms_files', 
+	'description'	=> array(
+		'de'									=> 'CMS als Dateien exportieren und importieren', 
+		'en'									=> 'export and import cms as files' 
+	), 
+	'lang'			=> 'de',
+	'thumbnail'		=> 'out/img/apps4print/a4p_logo.jpg', 
+	'version'		=> '<a4p_VERSION> (1.0.0)', 
+	'author'		=> 'apps4print', 
+	'url'			=> 'http://www.apps4print.com', 
+	'email'			=> 'support@apps4print.com', 
+	'extend'	  	=> array(
+	), 
+	'files'			=> array(
+		'a4p_admin_cms_files'					=> 'apps4print/a4p_admin_cms_files/controllers/admin/a4p_admin_cms_files.php', 
+		'a4p_admin_cms_files__core'				=> 'apps4print/a4p_admin_cms_files/core/a4p_admin_cms_files__core.php' 
+	), 
+	'blocks'		=> array(
+		array( 'template' => 'headitem.tpl',	'block' => 'admin_headitem_inccss',	'file' => '/views/blocks/a4p_admin_headitem_inccss.tpl' )
+	), 
+	'settings'		=> array(
+	),
+	'templates'		=> array(
+		'a4p_admin_cms_files.tpl'				=> 'apps4print/a4p_admin_cms_files/views/admin/tpl/a4p_admin_cms_files.tpl' 
+	), 
+	'events'		=> array(
+	)
+);
+
+// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------

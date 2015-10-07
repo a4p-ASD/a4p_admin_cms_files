@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OX>
+	<OXMENU id="NAVIGATION_ESHOPADMIN">
+		<MAINMENU id="mxcustnews">
+			<SUBMENU id="a4p_ADMIN_CMS_FILES" cl="a4p_admin_cms_files">
+			</SUBMENU>
+		</MAINMENU>
+	</OXMENU>
+</OX>
