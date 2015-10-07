@@ -5,8 +5,8 @@
  *	@company:	apps4print / page one GmbH, Nürnberg, Germany
  *
  *
- *	@version:	1.0.0
- *	@date:		28.08.2015
+ *	@version:	1.0.1
+ *	@date:		07.10.2015
  *
  *
  *	a4p_admin_cms_files.tpl
@@ -92,12 +92,14 @@
 
 			import from: <input type="text" id="s_cms_files__import_dir__rel" name="s_cms_files__import_dir__rel" value="[{ $oView->get_cms_files_dir__rel() }]" size="30">
 
+			[{assign var="sDate__curDay" value=$smarty.now|date_format:"%Y-%m-%d" }]
+
 			<br>
 			[{assign var="a_cms_folders" value=$oView->get_cms_folders() }]
 			[{foreach from=$a_cms_folders key=i_key item=a_folder }]
 			
 				<input type="radio" name="s_cms_files__import_dir__rel" id="a_folder__[{ $i_key }]" value="[{ $a_folder.rel }]"[{if $s_selected_folder == $a_folder.rel }] checked="checked"[{/if}]>
-				<label for="a_folder__[{ $i_key }]">[{ $a_folder.name }]</label> ([{ $a_folder.contents}])<br>
+				<label for="a_folder__[{ $i_key }]"[{if $a_folder.name|stristr:$sDate__curDay }] class="cur_day"[{/if}]>[{ $a_folder.name }]</label> ([{ $a_folder.contents}])<br>
 				
 			[{/foreach}]
 
