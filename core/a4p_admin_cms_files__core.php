@@ -33,6 +33,9 @@ class a4p_admin_cms_files__core {
 	protected $s_cms_files_dir__rel				= "data/cms/";
 	
 	
+	protected $b_skipInactiveCMS				= true;
+	
+	
 	// ------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------
 	
@@ -438,6 +441,7 @@ class a4p_admin_cms_files__core {
 		#	$this->o_a4p_debug_log->_log( "\$s_cms_ident", $s_cms_ident, __FILE__, __FUNCTION__, __LINE__ );
 		}
 
+		
 
 		// ------------------------------------------------------------------------------------------------
 		// prüfen ob es ein CMS mit dem ident des Dateinamen gibt
@@ -462,7 +466,13 @@ class a4p_admin_cms_files__core {
 			#	$this->o_a4p_debug_log->_log( "utf8_decode \$s_file_content", utf8_decode( $s_file_content ), __FILE__, __FUNCTION__, __LINE__ );
 			}
 
-				
+
+			// ------------------------------------------------------------------------------------------------
+			// inaktive ggf. auslassen
+			if ( $this->b_skipInactiveCMS && ( $o_oxContent->oxcontents__oxactive->value !== "1" ) )
+				$b_update_cms					= false;
+
+
 			// ------------------------------------------------------------------------------------------------
 			// Update ausführen
 			if ( $b_update_cms ) {
@@ -473,41 +483,67 @@ class a4p_admin_cms_files__core {
 				if ( $o_oxContent->oxcontents__oxcontent->value !== $s_file_content ) {
 
 
-					#$s_file_content				= utf8_encode( $s_file_content );
-					#$s_file_content				= utf8_decode( $s_file_content );
+					// ------------------------------------------------------------------------------------------------
+					// Umlaute in ANSI-Files: Text ab erstem Umlaut abgeschnitten! (encoding: ASCII / false)
+					
+					$s_file_content__encoding	= mb_detect_encoding( $s_file_content );
+					if ( $s_file_content__encoding !== "UTF-8" )
+						$s_file_content			= mb_convert_encoding( $s_file_content, "UTF-8" );
 
-					// dsc-demo: kein utf8_*
-					// drucksachencloud: kein utf8_*
+
+					$s_content_backup			= $o_oxContent->oxcontents__oxcontent->value;
 
 
+					// ------------------------------------------------------------------------------------------------
+					// Update
 					$a_update					= array();
 					$a_update[ "oxcontent" ]	= $s_file_content;
-
 					$o_oxContent->assign( $a_update );
-
 					$o_oxContent->save();
 
 
-					$i_ret                      = 2;
+					// ------------------------------------------------------------------------------------------------
+					// check und ggf. restore
+					$o_oxContent				= null;
+					$o_oxContent				= oxNew( "oxContent" );
+					$o_oxContent->loadByIdent( $s_cms_ident );
+					$s_oxcontent__updated		= $o_oxContent->oxcontents__oxcontent->value;
 
-					oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "CMS '" . $s_cms_ident . "' updated" );
+					if ( $s_oxcontent__updated !== $s_file_content ) {
+
+						$a_update					= array();
+						$a_update[ "oxcontent" ]	= $s_content_backup;
+						$o_oxContent->assign( $a_update );
+						$o_oxContent->save();
+
+
+						oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "--- CMS '" . $s_cms_ident . "' update failed -> restored!" );
+
+					} else {
+
+						$i_ret					= 2;
+
+						oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "CMS '" . $s_cms_ident . "' updated" );
+					}
+					
 
 				}
 
 			} else {
 
 				// ------------------------------------------------------------------------------------------------
-				// oxContent aktualisieren
+				// nur Ausgabe
 				if ( $o_oxContent->oxcontents__oxcontent->value !== $s_file_content ) {
 
 
 					// ------------------------------------------------------------------------------------------------
-					if ( $this->o_a4p_debug_log ) {
-					#	$this->o_a4p_debug_log->_log( "\$o_oxContent->oxcontents__oxcontent->value", $o_oxContent->oxcontents__oxcontent->value, __FILE__, __FUNCTION__, __LINE__ );
-					#	$this->o_a4p_debug_log->_log( "\$s_file_content", $s_file_content, __FILE__, __FUNCTION__, __LINE__ );
+					// inaktive ggf. auslassen
+					if ( ! ( $this->b_skipInactiveCMS && ( $o_oxContent->oxcontents__oxactive->value !== "1" ) ) ) {
+					
+						oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "would update CMS '" . $s_cms_ident . "' from file '" . $s_cms_file__abs . "'" );
+
 					}
 
-					oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "would update CMS '" . $s_cms_ident . "' from file '" . $s_cms_file__abs . "'" );
 				}
 
 
