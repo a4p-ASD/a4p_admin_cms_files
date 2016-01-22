@@ -26,7 +26,7 @@ $aLang = array(
 
 	'charset'									=> 'UTF-8',
 
-	'a4p_ADMIN_CMS_FILES'						=> "CMS-Seiten als Datei <img src='http://www.apps4print.com/images/_a4p_ToolboxLogo.gif' border='0' width='12' height='12'>",
+	'a4p_ADMIN_CMS_FILES'						=> "CMS-Seiten als Datei <img src='../modules/apps4print/a4p_admin_cms_files/out/img/apps4print/a4p_logo__icon.gif' border='0' width='12' height='12'>",
 
 );
 
