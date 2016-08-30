@@ -5,8 +5,8 @@
  *	@company:	apps4print / page one GmbH, Nürnberg, Germany
  *
  *
- *	@version:	1.0.1
- *	@date:		07.10.2015
+ *	@version:	1.1.0
+ *	@date:		30.08.2016
  *
  *
  *	a4p_admin_cms_files.tpl
@@ -104,6 +104,10 @@
 			[{/foreach}]
 
 			<hr>
+
+			<input type="checkbox" name="b_create_cms" id="b_create_cms" value="1" checked="checked"><label for="b_create_cms">fehlende CMS erstellen</label>
+			<br>
+
 			[{if isset( $s_selected_folder ) }]
 				<input type="checkbox" name="b_update_cms" id="b_update_cms" value="1" checked="checked"><label for="b_update_cms">gefundene CMS aktualisieren</label>
 			[{/if}]

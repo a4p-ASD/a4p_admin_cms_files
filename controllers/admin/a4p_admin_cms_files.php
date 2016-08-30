@@ -5,8 +5,8 @@
  *	@company:	apps4print / page one GmbH, Nürnberg, Germany
  *
  *
- *	@version:	1.0.1
- *	@date:		07.10.2015
+ *	@version:	1.1.0
+ *	@date:		30.08.2016
  *
  *
  *	a4p_admin_cms_files.php
@@ -104,10 +104,13 @@ class a4p_admin_cms_files extends oxAdminView {
 		
 		
 		// ------------------------------------------------------------------------------------------------
-		// CMS-Ordner aus Übergabeparameter
+		// Übergabeparameter
 		$s_custom_cms_files_dir__rel			= oxRegistry::getConfig()->getRequestParameter( "s_cms_files__import_dir__rel" );
 
 		$b_update_cms               			= oxRegistry::getConfig()->getRequestParameter( "b_update_cms" );
+		$b_skip_update_inactive_cms				= oxRegistry::getConfig()->getRequestParameter( "b_skip_update_inactive_cms" );
+		$b_create_cms							= oxRegistry::getConfig()->getRequestParameter( "b_create_cms" );
+		// ------------------------------------------------------------------------------------------------
 
 
 		$o_a4p_admin_cms_files__core			= oxRegistry::get( "a4p_admin_cms_files__core" );
@@ -118,7 +121,7 @@ class a4p_admin_cms_files extends oxAdminView {
 		
 		
 		// Import ausführen
-		$a_ret									= $o_a4p_admin_cms_files__core->import_cms( $b_update_cms );
+		$a_ret									= $o_a4p_admin_cms_files__core->import_cms( $b_update_cms, $b_skip_update_inactive_cms, $b_create_cms );
 		
 		
 		$this->addTplParam( "a_ret__import", $a_ret );

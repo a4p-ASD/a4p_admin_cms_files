@@ -5,8 +5,8 @@
  *	@company:	apps4print / page one GmbH, Nürnberg, Germany
  *
  *
- *	@version:	1.0.1
- *	@date:		07.10.2015
+ *	@version:	1.1.0
+ *	@date:		30.08.2016
  *
  *
  *	a4p_admin_cms_files__core.php
@@ -31,11 +31,8 @@ class a4p_admin_cms_files__core {
 	protected $s_cms_files_dir__abs				= null;
 	
 	protected $s_cms_files_dir__rel				= "data/cms/";
-	
-	
-	protected $b_skipInactiveCMS				= true;
-	
-	
+
+
 	// ------------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------------
 	
@@ -127,7 +124,7 @@ class a4p_admin_cms_files__core {
 	/**
 	 * @param bool|false $b_update_cms
 	 */
-	public function import_cms( $b_update_cms = false ) {
+	public function import_cms( $b_update_cms = false, $b_skip_update_inactive_cms = false, $b_create_cms = false ) {
 		
 
 		// ------------------------------------------------------------------------------------------------
@@ -153,7 +150,7 @@ class a4p_admin_cms_files__core {
 		// alle gefundenen Dateien prüfen/importieren
 		foreach ( $a_cms_files as $i_key => $s_cms_file__abs ) {
 
-			$i_ret                              = $this->_import_cms_from_file( $s_cms_file__abs, $b_update_cms );
+			$i_ret                              = $this->_import_cms_from_file( $s_cms_file__abs, $b_update_cms, $b_skip_update_inactive_cms, $b_create_cms );
 		}
 		// ------------------------------------------------------------------------------------------------
 		
@@ -416,7 +413,7 @@ class a4p_admin_cms_files__core {
 	
 	// ------------------------------------------------------------------------------------------------
 	
-	protected function _import_cms_from_file( $s_cms_file__abs, $b_update_cms = false ) {
+	protected function _import_cms_from_file( $s_cms_file__abs, $b_update_cms = false, $b_skip_update_inactive_cms = false, $b_create_cms = false ) {
 		
 		
 		// ------------------------------------------------------------------------------------------------
@@ -469,7 +466,7 @@ class a4p_admin_cms_files__core {
 
 			// ------------------------------------------------------------------------------------------------
 			// inaktive ggf. auslassen
-			if ( $this->b_skipInactiveCMS && ( $o_oxContent->oxcontents__oxactive->value !== "1" ) )
+			if ( $b_skip_update_inactive_cms && ( $o_oxContent->oxcontents__oxactive->value !== "1" ) )
 				$b_update_cms					= false;
 
 
@@ -538,7 +535,7 @@ class a4p_admin_cms_files__core {
 
 					// ------------------------------------------------------------------------------------------------
 					// inaktive ggf. auslassen
-					if ( ! ( $this->b_skipInactiveCMS && ( $o_oxContent->oxcontents__oxactive->value !== "1" ) ) ) {
+					if ( ! ( $b_skip_update_inactive_cms && ( $o_oxContent->oxcontents__oxactive->value !== "1" ) ) ) {
 					
 						oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "would update CMS '" . $s_cms_ident . "' from file '" . $s_cms_file__abs . "'" );
 
@@ -551,7 +548,49 @@ class a4p_admin_cms_files__core {
 			}
 
 
+		} else if ( $b_create_cms ) {
+
+
+			// ------------------------------------------------------------------------------------------------
+			// Update ausführen
+			if ( $b_update_cms ) {
+
+		
+				// ------------------------------------------------------------------------------------------------
+				// Datei auslesen
+				$s_file_content				    = file_get_contents( $s_cms_file__abs );
+	
+	
+				// ------------------------------------------------------------------------------------------------
+				// Umlaute in ANSI-Files: Text ab erstem Umlaut abgeschnitten! (encoding: ASCII / false)
+				
+				$s_file_content__encoding		= mb_detect_encoding( $s_file_content );
+				if ( $s_file_content__encoding !== "UTF-8" )
+					$s_file_content				= mb_convert_encoding( $s_file_content, "UTF-8" );
+	
+	
+				// ------------------------------------------------------------------------------------------------
+				// Update
+				$a_update						= array();
+				$a_update[ "oxloadid" ]			= $s_cms_ident;
+				$a_update[ "oxtitle" ]			= $s_cms_ident;
+				$a_update[ "oxcontent" ]		= $s_file_content;
+				$o_oxContent->assign( $a_update );
+				$o_oxContent->save();
+	
+				oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "CMS '" . $s_cms_ident . "' created" );
+
+			} else {
+
+				// ------------------------------------------------------------------------------------------------
+				// nur Ausgabe
+				oxRegistry::get( "oxUtilsView" )->addErrorToDisplay( "would create CMS '" . $s_cms_ident . "' from file '" . $s_cms_file__abs . "'" );
+
+			}
+
+
 		}
+		
 		
 		return $i_ret;
 	}
