@@ -5,8 +5,8 @@
  *	@company:	apps4print / page one GmbH, Nürnberg, Germany
  *
  *
- *	@version:	1.0.1
- *	@date:		07.10.2015
+ *	@version:	1.1.0
+ *	@date:		30.08.2016
  *
  *
  *	module_options.php
