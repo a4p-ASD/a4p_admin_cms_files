@@ -38,7 +38,10 @@ $aModule = array(
 	), 
 	'files'			=> array(
 		'a4p_admin_cms_files'					=> 'apps4print/a4p_admin_cms_files/controllers/admin/a4p_admin_cms_files.php', 
-		'a4p_admin_cms_files__core'				=> 'apps4print/a4p_admin_cms_files/core/a4p_admin_cms_files__core.php' 
+		'a4p_admin_cms_files_for_translation'	=> 'apps4print/a4p_admin_cms_files/controllers/admin/a4p_admin_cms_files_for_translation.php', 
+		'a4p_admin_cms_files__core'				=> 'apps4print/a4p_admin_cms_files/core/a4p_admin_cms_files__core.php', 
+		'a4p_admin_cms_files__translation_excel'	=> 'apps4print/a4p_admin_cms_files/core/a4p_admin_cms_files__translation_excel.php', 
+		'a4p_admin_cms_files__tag_parser'		=> 'apps4print/a4p_admin_cms_files/core/a4p_admin_cms_files__tag_parser.php' 
 	), 
 	'blocks'		=> array(
 		array( 'template' => 'headitem.tpl',	'block' => 'admin_headitem_inccss',	'file' => '/views/blocks/a4p_admin_headitem_inccss.tpl' )
@@ -46,7 +49,8 @@ $aModule = array(
 	'settings'		=> array(
 	),
 	'templates'		=> array(
-		'a4p_admin_cms_files.tpl'				=> 'apps4print/a4p_admin_cms_files/views/admin/tpl/a4p_admin_cms_files.tpl' 
+		'a4p_admin_cms_files.tpl'					=> 'apps4print/a4p_admin_cms_files/views/admin/tpl/a4p_admin_cms_files.tpl', 
+		'a4p_admin_cms_files_for_translation.tpl'	=> 'apps4print/a4p_admin_cms_files/views/admin/tpl/a4p_admin_cms_files_for_translation.tpl' 
 	), 
 	'events'		=> array(
 	)

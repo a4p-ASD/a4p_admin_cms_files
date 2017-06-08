@@ -4,6 +4,8 @@
 		<MAINMENU id="mxcustnews">
 			<SUBMENU id="a4p_ADMIN_CMS_FILES" cl="a4p_admin_cms_files">
 			</SUBMENU>
+			<SUBMENU id="a4p_ADMIN_CMS_FILES_FOR_TRANSLATION" cl="a4p_admin_cms_files_for_translation">
+			</SUBMENU>
 		</MAINMENU>
 	</OXMENU>
 </OX>
