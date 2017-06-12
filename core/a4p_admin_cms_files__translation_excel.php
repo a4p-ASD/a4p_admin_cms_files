@@ -51,7 +51,8 @@ class a4p_admin_cms_files__translation_excel {
 	public function __construct() {
 
 
-ini_set( "max_execution_time", 0 );
+		ini_set( "max_execution_time", 0 );
+
 
 		// ------------------------------------------------------------------------------------------------
 		// init a4p_debug_log
@@ -73,15 +74,15 @@ ini_set( "max_execution_time", 0 );
 	public function export_cms_for_translation() {
 
 
-		// ------------------------------------------------------------------------------------------------
-		if ( $this->o_a4p_debug_log ) {
-		#	$this->o_a4p_debug_log->_log( __CLASS__ . "::export_cms()", "null", __FILE__, __FUNCTION__, __LINE__ );
-		}
-
-
-
 		/* @var $o_oxcontent oxContent */
 		$o_oxcontent							= oxNew( "oxContent" );
+
+
+		// ------------------------------------------------------------------------------------------------
+		// CMS-Blacklist aus Modul-Setting
+		$a_cms_blacklist						= oxRegistry::getConfig()->getConfigParam( "a4p_admin_cms_files__aCmsBlacklist" );
+		// ------------------------------------------------------------------------------------------------
+
 
 
 		// ------------------------------------------------------------------------------------------------
@@ -92,7 +93,12 @@ ini_set( "max_execution_time", 0 );
 
 		$sSql									= "SELECT * FROM " . $o_oxcontent->getCoreTableName();
 		$sSql									.= " WHERE 1";
-		   $sSql .= " AND oxactive = 1";
+		$sSql									.= " AND oxactive = 1";
+		
+		if ( count( $a_cms_blacklist ) ) {
+		
+			$sSql								.= " AND NOT oxloadid IN ( '" . implode( "', '", $a_cms_blacklist ) . "' )";
+		}
 
 		$sSql									.= " ORDER BY oxloadid";
 
@@ -101,7 +107,7 @@ ini_set( "max_execution_time", 0 );
 
 		// ------------------------------------------------------------------------------------------------
 		// Ausgabe-Ordner setzen
-					$this->set_cms_files_translate_dir( false, true );
+		$this->set_cms_files_translate_dir( false, true );
 		// ------------------------------------------------------------------------------------------------
 
 
@@ -181,7 +187,7 @@ ini_set( "max_execution_time", 0 );
 		// alle gefundenen Dateien prüfen/importieren
 		foreach ( $a_cms_files as $i_key => $s_cms_file__abs ) {
 
-			$i_ret							  = $this->_import_cms_from_file( $s_cms_file__abs, $b_update_cms, $b_skip_update_inactive_cms, $b_create_cms );
+			$i_ret								= $this->_import_cms_from_file( $s_cms_file__abs, $b_update_cms, $b_skip_update_inactive_cms, $b_create_cms );
 		}
 		// ------------------------------------------------------------------------------------------------
 
@@ -371,11 +377,11 @@ ini_set( "max_execution_time", 0 );
 
 					// ------------------------------------------------------------------------------------------------
 					// Anzahl Dateien im Ordner
-					$i_dircontents			  = count( scandir( $s_cur_file__abs ) );
+					$i_dircontents				= count( scandir( $s_cur_file__abs ) );
 					if ( $i_dircontents )
-						$i_dircontents		  -= 2;
+						$i_dircontents			-= 2;
 					if ( !$i_dircontents )
-						$i_dircontents		  = 0;
+						$i_dircontents			= 0;
 					$a_folder[ "contents" ]		= $i_dircontents;
 
 					// ------------------------------------------------------------------------------------------------
@@ -384,7 +390,7 @@ ini_set( "max_execution_time", 0 );
 					if ( isset( $a_cms_folders[ $i_folder_filemtime ] ) )
 						array_push( $a_cms_folders, $a_folder );
 					else
-						$a_cms_folders[ $i_folder_filemtime ]	   = $a_folder;
+						$a_cms_folders[ $i_folder_filemtime ]		= $a_folder;
 
 				}
 
@@ -532,7 +538,7 @@ ini_set( "max_execution_time", 0 );
 		}
 
 
-		$i_ret								  = 0;
+		$i_ret									= 0;
 
 
 		$a_pathinfo								= pathinfo( $s_cms_file__abs );
@@ -653,7 +659,7 @@ ini_set( "max_execution_time", 0 );
 				}
 
 
-				$i_ret						  = 1;
+				$i_ret							= 1;
 			}
 
 
@@ -797,12 +803,21 @@ ini_set( "max_execution_time", 0 );
 
 	protected function _xls_insert_header_row() {
 
+/*
 		$this->objPHPExcel->getActiveSheet()
 					->setCellValue( 'A1', 'Id' )
 					->setCellValue( 'B1', 'Title DE' )
 					->setCellValue( 'C1', 'Title ' . strtoupper( $this->s_export_language_abbr ) )
 					->setCellValue( 'D1', 'Content DE' )
 					->setCellValue( 'E1', 'Content ' . strtoupper( $this->s_export_language_abbr ) );
+*/
+
+		$this->objPHPExcel->getActiveSheet()
+					->setCellValue( 'A1', 'Id' )
+					->setCellValue( 'B1', 'Title de' )
+					->setCellValue( 'C1', 'Title ' . $this->s_export_language_abbr )
+					->setCellValue( 'D1', 'Content de' )
+					->setCellValue( 'E1', 'Content ' . $this->s_export_language_abbr );
 
 	}
 

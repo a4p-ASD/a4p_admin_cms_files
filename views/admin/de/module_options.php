@@ -27,16 +27,11 @@ $aLang = array(
 	'charset'									=> 'UTF-8',
 	
 	'SHOP_MODULE_GROUP_a4p_main'				=> 'apps4print Einstellungen',
-	'SHOP_MODULE_a4p_errorlog_logfile_abs'		=> 'Log-Datei',
-	'HELP_SHOP_MODULE_a4p_errorlog_logfile_abs'	=> 'bitte absoluten Pfad inklusive Dateiname angeben ( z.B.: /var/log/httpd/error_log oder /var/www/vhosts/_a4p_apache_logs/oxid-develop/error_log )',
 
-	/* Entries in lang.php for constraints example:
-	 'SHOP_MODULE_sConfigTest'        => 'Field Label',
-	 'SHOP_MODULE_sConfigTest_0'      => '',
-	 'SHOP_MODULE_sConfigTest_1'      => 'Value x',
-	 'SHOP_MODULE_sConfigTest_2'      => 'Value y',
-	 'SHOP_MODULE_sConfigTest_3'      => 'Value z'
-	*/	
+
+	'SHOP_MODULE_a4p_admin_cms_files__aCmsBlacklist'		=> 'CMS-Blacklist',
+	'HELP_SHOP_MODULE_a4p_admin_cms_files__aCmsBlacklist'	=> 'Liste mit CMS-Idents, die nicht exportiert werden sollen. Jeden Ident in eine eigene Zeile schreiben.',
+
 );
 
 // ------------------------------------------------------------------------------------------------

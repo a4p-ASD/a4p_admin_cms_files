@@ -47,7 +47,8 @@ $aModule = array(
 		array( 'template' => 'headitem.tpl',	'block' => 'admin_headitem_inccss',	'file' => '/views/blocks/a4p_admin_headitem_inccss.tpl' )
 	), 
 	'settings'		=> array(
-	),
+		array( 'group' => 'a4p_main',	'name' => 'a4p_admin_cms_files__aCmsBlacklist',		'type' => 'arr',  'value' => array('oxagb','oxstart') ), 
+	), 
 	'templates'		=> array(
 		'a4p_admin_cms_files.tpl'					=> 'apps4print/a4p_admin_cms_files/views/admin/tpl/a4p_admin_cms_files.tpl', 
 		'a4p_admin_cms_files_for_translation.tpl'	=> 'apps4print/a4p_admin_cms_files/views/admin/tpl/a4p_admin_cms_files_for_translation.tpl' 
