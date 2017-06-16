@@ -55,6 +55,13 @@ class a4p_admin_cms_files_for_translation extends oxAdminView {
             // CMS-Ordner aus Übergabeparameter
             $s_custom_cms_files_dir__rel = oxRegistry::getConfig()->getRequestParameter( "s_cms_files__export_dir__rel" );
 
+
+			$b_filter_tags						= oxRegistry::getConfig()->getRequestParameter( "b_filter_tags" );
+			if ( is_null( $b_filter_tags ) ) {
+				$b_filter_tags					= false;
+			}
+
+
             $o_a4p_admin_cms_files__core = oxRegistry::get( "a4p_admin_cms_files__translation_excel" );
 
             // Set export language
@@ -74,7 +81,7 @@ class a4p_admin_cms_files_for_translation extends oxAdminView {
             } else {
 
                 // Export ausführen
-                $a_ret = $o_a4p_admin_cms_files__core->export_cms_for_translation();
+                $a_ret = $o_a4p_admin_cms_files__core->export_cms_for_translation( $b_filter_tags );
 
                 $this->addTplParam( "a_ret__export", $a_ret );
 

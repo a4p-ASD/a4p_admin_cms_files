@@ -71,7 +71,7 @@ class a4p_admin_cms_files__translation_excel {
 
 	// ------------------------------------------------------------------------------------------------
 
-	public function export_cms_for_translation() {
+	public function export_cms_for_translation( $b_filter_tags ) {
 
 
 		/* @var $o_oxcontent oxContent */
@@ -129,7 +129,7 @@ class a4p_admin_cms_files__translation_excel {
 
 			}
 
-			$b_ret__export = $this->_save_cms_for_translation( $o_oxcontent, $i_cms__exported+2 );
+			$b_ret__export = $this->_save_cms_for_translation( $o_oxcontent, $i_cms__exported + 2, $b_filter_tags );
 
 			if( $i_cms__exported + 1 == $i_cms__total ) {
 
@@ -141,6 +141,7 @@ class a4p_admin_cms_files__translation_excel {
 			if ( $b_ret__export ) {
 				$i_cms__exported++;
 			}
+
 
 		}
 		// ------------------------------------------------------------------------------------------------
@@ -159,7 +160,11 @@ class a4p_admin_cms_files__translation_excel {
 	// ------------------------------------------------------------------------------------------------
 
 	/**
-	 * @param bool|false $b_update_cms
+	 * @param bool $b_update_cms
+	 * @param bool $b_skip_update_inactive_cms
+	 * @param bool $b_create_cms
+	 *
+	 * @return int
 	 */
 	public function import_cms( $b_update_cms = false, $b_skip_update_inactive_cms = false, $b_create_cms = false ) {
 
@@ -712,7 +717,7 @@ class a4p_admin_cms_files__translation_excel {
 
 	// ------------------------------------------------------------------------------------------------
 
-	protected function _save_cms_for_translation( &$o_oxcontent, $row_nr ) {
+	protected function _save_cms_for_translation( &$o_oxcontent, $row_nr, $b_filter_tags ) {
 
 		// ------------------------------------------------------------------------------------------------
 		if ( $this->o_a4p_debug_log ) {
@@ -722,7 +727,7 @@ class a4p_admin_cms_files__translation_excel {
 		$b_ret = false;
 		$s_cms_ident = $o_oxcontent->oxcontents__oxloadid->value;
 
-		$b_ret__save = $this->_save_cms_to_xls( $s_cms_ident, $o_oxcontent, $row_nr );
+		$b_ret__save = $this->_save_cms_to_xls( $s_cms_ident, $o_oxcontent, $row_nr, $b_filter_tags );
 
 		if ( $b_ret__save !== false ) {
 			$b_ret = true;
@@ -733,15 +738,29 @@ class a4p_admin_cms_files__translation_excel {
 
 	// ------------------------------------------------------------------------------------------------
 
-	protected function _save_cms_to_xls( &$s_cms_ident, &$o_oxcontent, &$row_nr ) {
+	protected function _save_cms_to_xls( &$s_cms_ident, &$o_oxcontent, &$row_nr, $b_filter_tags ) {
 
 		// Inhalt in Deutsch
-		$o_cms_data_1 = $this->_getCmsContentForLang( $s_cms_ident, 0 );
-		$o_cms_content_1_parsed = $this->_filterTags( $o_cms_data_1->content );
+		$o_cms_data_1							= $this->_getCmsContentForLang( $s_cms_ident, 0 );
+		
+		if ( $b_filter_tags ) {
+			$o_cms_content_1_parsed				= $this->_filterTags( $o_cms_data_1->content );
+			$s_cms_content_1					= $o_cms_content_1_parsed->parsedText;
+		} else {
+			$s_cms_content_1					= $o_cms_data_1->content;
+		} 
+		
 
 		// Inhalt in Zielsprache
-		$o_cms_data_2 = $this->_getCmsContentForLang( $s_cms_ident, $this->i_export_language_id );
-		$o_cms_content_2_parsed = $this->_filterTags( $o_cms_data_2->content );
+		$o_cms_data_2							= $this->_getCmsContentForLang( $s_cms_ident, $this->i_export_language_id );
+
+		if ( $b_filter_tags ) {
+			$o_cms_content_2_parsed				= $this->_filterTags( $o_cms_data_2->content );
+			$s_cms_content_2					= $o_cms_content_2_parsed->parsedText;
+		} else {
+			$s_cms_content_2					= $o_cms_data_2->content;
+		} 
+
 
 
 		$this->objPHPExcel->getActiveSheet()
@@ -750,8 +769,10 @@ class a4p_admin_cms_files__translation_excel {
 					->setCellValueByColumnAndRow( 1, $row_nr, $o_cms_data_1->title )
 					//->setCellValueByColumnAndRow( 2, $row_nr, $o_oxcontent->{oxcontents__oxtitle_.$this->i_export_language_id}->value )
 					->setCellValueByColumnAndRow( 2, $row_nr, $o_cms_data_2->title )
-					->setCellValueByColumnAndRow( 3, $row_nr, $o_cms_content_1_parsed->parsedText )
-					->setCellValueByColumnAndRow( 4, $row_nr, $o_cms_content_2_parsed->parsedText );
+					#->setCellValueByColumnAndRow( 3, $row_nr, $o_cms_content_1_parsed->parsedText )
+					->setCellValueByColumnAndRow( 3, $row_nr, $s_cms_content_1 )
+					#->setCellValueByColumnAndRow( 4, $row_nr, $o_cms_content_2_parsed->parsedText );
+					->setCellValueByColumnAndRow( 4, $row_nr, $s_cms_content_2 );
 
 	}
 

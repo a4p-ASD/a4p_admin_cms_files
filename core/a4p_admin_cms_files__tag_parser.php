@@ -81,6 +81,14 @@ class a4p_admin_cms_files__tag_parser {
 
 					$i_pos						= 0;
 
+				} else {
+
+					// restlichen Text übernehmen
+					$s_parsed_text				.= $str;
+
+					// parsen beenden, wenn kein öffnendes Tag mehr gefunden wird
+					$i_pos						= $i_len;
+
 				}
 				// ------------------------------------------------------------------------------------------------
 
